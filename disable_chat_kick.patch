@@ -1,0 +1,42 @@
+diff --git a/disable_chat_kick.patch b/disable_chat_kick.patch
+new file mode 100644
+index 00000000..e69de29b
+diff --git a/proxy/src/main/java/com/velocitypowered/proxy/connection/client/ClientPlaySessionHandler.java b/proxy/src/main/java/com/velocitypowered/proxy/connection/client/ClientPlaySessionHandler.java
+index ef769b16..9fc15808 100644
+--- a/proxy/src/main/java/com/velocitypowered/proxy/connection/client/ClientPlaySessionHandler.java
++++ b/proxy/src/main/java/com/velocitypowered/proxy/connection/client/ClientPlaySessionHandler.java
+@@ -136,10 +136,6 @@ public class ClientPlaySessionHandler implements MinecraftSessionHandler {
+     if (instant == null) {
+       return true;
+     }
+-    if (!this.timeKeeper.update(instant)) {
+-      player.disconnect(Component.translatable("multiplayer.disconnect.out_of_order_chat"));
+-      return false;
+-    }
+     return true;
+   }
+ 
+diff --git a/proxy/src/main/java/com/velocitypowered/proxy/protocol/packet/chat/keyed/KeyedChatHandler.java b/proxy/src/main/java/com/velocitypowered/proxy/protocol/packet/chat/keyed/KeyedChatHandler.java
+index f4964e6c..0ea079e2 100644
+--- a/proxy/src/main/java/com/velocitypowered/proxy/protocol/packet/chat/keyed/KeyedChatHandler.java
++++ b/proxy/src/main/java/com/velocitypowered/proxy/protocol/packet/chat/keyed/KeyedChatHandler.java
+@@ -49,19 +49,9 @@ public class KeyedChatHandler implements
+   }
+ 
+   public static void invalidCancel(Logger logger, ConnectedPlayer player) {
+-    logger.fatal("A plugin tried to cancel a signed chat message."
+-        + " This is no longer possible in 1.19.1 and newer. "
+-        + "Disconnecting player " + player.getUsername());
+-    player.disconnect(Component.text("A proxy plugin caused an illegal protocol state. "
+-        + "Contact your network administrator."));
+   }
+ 
+   public static void invalidChange(Logger logger, ConnectedPlayer player) {
+-    logger.fatal("A plugin tried to change a signed chat message. "
+-        + "This is no longer possible in 1.19.1 and newer. "
+-        + "Disconnecting player " + player.getUsername());
+-    player.disconnect(Component.text("A proxy plugin caused an illegal protocol state. "
+-        + "Contact your network administrator."));
+   }
+ 
+   @Override
